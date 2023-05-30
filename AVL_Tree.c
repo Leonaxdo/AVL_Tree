@@ -20,16 +20,18 @@ int max(int a, int b) {
 }
 
 // 노드의 높이를 반환하는 함수
-intFactor(Node* node) {
-  if (node == getHeight(Node* node) {
+int getHeight(Node* node) {
   if (node == NULL) return 0;
   return node->height;
 }
 
+
 // 노드의 균형 인자를 반환하는 함수
-int get) return 0;
+int getBalanceFactor(Node* node) {
+  if (node == NULL) return 0;
   return getHeight(node->left) - getHeight(node->right);
 }
+
 
 // 노드의 높이를 업데이트하는 함수
 void updateHeight(Node* node) {
@@ -237,22 +239,24 @@ int main() {
   insertValue(&tree, 25);
 
   // 출력 예제
-  printf("Preorder traversal of the constructed AVL tree is \n");
+  printf("생성된 AVL tree : \n");
   preOrder(tree.root);
-
+  printf("\n");
+  
   // 삭제 예제
   deleteValue(&tree, 20);
-
-  printf("\nPreorder traversal after deleting 20 \n");
+  
+  printf("\n20을 삭제한 후의 값 : \n");
   preOrder(tree.root);
-
+  printf("\n");
+  
   // 탐색 예제
   int valueToSearch = 30;
   Node* searchedNode = searchValue(&tree, valueToSearch);
   if (searchedNode != NULL) {
-    printf("\nNode with key %d is present in the tree with height: %d\n", valueToSearch, searchedNode->height);
+    printf("\n노드 값 %d 이 위치하고 있는 트리의 height는 %d 입니다.\n", valueToSearch, searchedNode->height);
   } else {
-    printf("\nNode with key %d is not present in the tree.\n", valueToSearch);
+    printf("\n노드 값 %d 은 해당 트리에 존재하지 않습니다.\n", valueToSearch);
   }
 
   return 0;
