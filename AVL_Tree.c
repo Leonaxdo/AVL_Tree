@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// 노드 구조체 정의
 typedef struct Node {
   int key;
   int height;
@@ -8,49 +9,67 @@ typedef struct Node {
   struct Node* right;
 } Node;
 
+// AVL 트리 구조체 정의
 typedef struct AVLTree {
   Node* root;
 } AVLTree;
 
+// 두 정수 중 더 큰 값을 반환하는 함수
 int max(int a, int b) {
   return (a > b) ? a : b;
 }
 
-int getHeight(Node* node) {
+// 노드의 높이를 반환하는 함수
+intFactor(Node* node) {
+  if (node == getHeight(Node* node) {
   if (node == NULL) return 0;
   return node->height;
 }
 
-int getBalanceFactor(Node* node) {
-  if (node == NULL) return 0;
+// 노드의 균형 인자를 반환하는 함수
+int get) return 0;
   return getHeight(node->left) - getHeight(node->right);
 }
 
+// 노드의 높이를 업데이트하는 함수
 void updateHeight(Node* node) {
   if (node == NULL) return;
   node->height = 1 + max(getHeight(node->left), getHeight(node->right));
 }
 
+// 우회전 함수
 Node* rotateRight(Node* y) {
   Node* x = y->left;
   Node* z = x->right;
+
+  // 회전 작업
   x->right = y;
   y->left = z;
+  
+  // 높이 업데이트
   updateHeight(y);
   updateHeight(x);
+  
   return x;
 }
 
+// 좌회전 함수
 Node* rotateLeft(Node* x) {
   Node* y = x->right;
   Node* z = y->left;
+  
+  // 회전 작업
   y->left = x;
   x->right = z;
+  
+  // 높이 업데이트
   updateHeight(x);
   updateHeight(y);
+  
   return y;
 }
 
+// 새 노드를 생성하고 초기화하는 함수
 Node* createNode(int key) {
   Node* newNode = (Node*)malloc(sizeof(Node));
   newNode->key = key;
@@ -60,7 +79,9 @@ Node* createNode(int key) {
   return newNode;
 }
 
+// 노드를 삽입하는 함수 (재귀적 호출)
 Node* insert(Node* node, int key) {
+  // 기본 삽입 작업
   if (node == NULL) return createNode(key);
 
   if (key < node->key) {
@@ -71,9 +92,13 @@ Node* insert(Node* node, int key) {
     return node;
   }
 
+  // 높이 업데이트
   updateHeight(node);
+  
+  // 균형 인자 계산
   int balance = getBalanceFactor(node);
 
+  // 균형을 맞추는 회전 작업
   if (balance > 1 && key < node->left->key) {
     return rotateRight(node);
   }
@@ -95,6 +120,7 @@ Node* insert(Node* node, int key) {
   return node;
 }
 
+// 최소값을 가진 노드를 찾아 반환하는 함수
 Node* minValueNode(Node* node) {
   Node* current = node;
   while (current->left != NULL) {
@@ -103,7 +129,9 @@ Node* minValueNode(Node* node) {
   return current;
 }
 
+// 노드를 삭제하는 함수 (재귀적 호출)
 Node* delete(Node* root, int key) {
+  // 기본 삭제 작업
   if (root == NULL) {
     return root;
   }
@@ -130,11 +158,16 @@ Node* delete(Node* root, int key) {
     }
   }
 
+  // 균형 유지 작업
   if (root == NULL) return root;
 
+  // 높이 업데이트
   updateHeight(root);
+  
+  // 균형 인자 계산
   int balance = getBalanceFactor(root);
 
+  // 균형을 맞추는 회전 작업
   if (balance > 1 && getBalanceFactor(root->left) >= 0) {
     return rotateRight(root);
   }
@@ -156,6 +189,7 @@ Node* delete(Node* root, int key) {
   return root;
 }
 
+// 노드를 탐색하는 함수
 Node* search(Node* node, int key) {
   if (node == NULL || node->key == key)
     return node;
@@ -166,18 +200,22 @@ Node* search(Node* node, int key) {
   return search(node->right, key);
 }
 
+// 트리에 값을 삽입하는 함수
 void insertValue(AVLTree* tree, int value) {
   tree->root = insert(tree->root, value);
 }
 
+// 트리에서 값을 삭제하는 함수
 void deleteValue(AVLTree* tree, int value) {
   tree->root = delete(tree->root, value);
 }
 
+// 트리에서 값을 찾는 함수
 Node* searchValue(AVLTree* tree, int value) {
   return search(tree->root, value);
 }
 
+// 전위 순회 함수
 void preOrder(Node* root) {
   if (root != NULL) {
     printf("%d ", root->key);
@@ -190,6 +228,7 @@ int main() {
   AVLTree tree;
   tree.root = NULL;
 
+  // 삽입 예제
   insertValue(&tree, 10);
   insertValue(&tree, 20);
   insertValue(&tree, 30);
@@ -197,14 +236,17 @@ int main() {
   insertValue(&tree, 50);
   insertValue(&tree, 25);
 
+  // 출력 예제
   printf("Preorder traversal of the constructed AVL tree is \n");
   preOrder(tree.root);
 
+  // 삭제 예제
   deleteValue(&tree, 20);
 
   printf("\nPreorder traversal after deleting 20 \n");
   preOrder(tree.root);
 
+  // 탐색 예제
   int valueToSearch = 30;
   Node* searchedNode = searchValue(&tree, valueToSearch);
   if (searchedNode != NULL) {
